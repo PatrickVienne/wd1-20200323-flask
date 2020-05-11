@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import random
 import datetime
+from models import Users, db
 
 app = Flask(__name__)
-
+db.create_all()
 
 @app.route("/")
 def main():
@@ -50,6 +51,22 @@ def lucky_number():
 @app.route("/lucky_number/success", methods=["GET"])
 def lucky_number_success():
     return render_template("lucky_number_success.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "GET":
+        users = db.query(Users).all()
+        context = {
+            "users": users
+        }
+        return render_template("register.html", **context)
+    elif request.method == "POST":
+        username = request.form.get("username")
+        new_user = Users(name=username, secret_number=10)
+        db.add(new_user)
+        db.commit()  # abspeichern aller geaddeten elemente, in einer transaktion.
+        return redirect(url_for('register'))
 
 
 # TODO TODAY:
