@@ -9,12 +9,11 @@
 
 {% block content %}
     <h1>Soo glad to see you! Let me give you your lucky number for {{ date_of_number }}</h1>
-    <p>{{ lucky_number }}</p>
 
     <form method="post">
         <div class="form-group">
             <label for="NumberInput">Number</label>
-            <input type="number" class="form-control" id="NumberInput">
+            <input type="number" class="form-control" id="NumberInput" name="number">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
