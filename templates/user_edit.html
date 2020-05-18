@@ -1,0 +1,28 @@
+{% extends "bootstrapframe.html" %}
+
+{% block title %}
+    User Edit
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <h1>Edit User {{ user.name }}</h1>
+
+    <form method="post">
+        <div class="form-group">
+            <label for="SecretNumberInput">Secret Number</label>
+            <input type="text" class="form-control" id="SecretNumberInput" name="secret_number" value="{{ user.secret_number }}">
+        </div>
+        <div class="form-group">
+            <label for="LoginTokenInput">Login Token</label>
+            <input type="text" class="form-control" id="LoginTokenInput" name="login_token" value="{{ user.login_token }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <br/>
+
+    <a href="/register">Back to Register</a>
+{% endblock content %}

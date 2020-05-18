@@ -15,6 +15,10 @@
             <label for="NameInput">Name</label>
             <input type="text" class="form-control" id="NameInput" name="username">
         </div>
+        <div class="form-group">
+            <label for="PasswordInput">Password</label>
+            <input type="password" class="form-control" id="PasswordInput" name="password">
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
@@ -24,7 +28,11 @@
             <tr>
                 <th>#</th>
                 <th>Username</th>
+                <th>Password</th>
                 <th>Secret Number</th>
+                <th>Login Token</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +40,11 @@
             <tr>
                 <th>{{ user.id }}</th>
                 <td>{{ user.name }}</td>
+                <td>{{ user.password }}</td>
                 <td>{{ user.secret_number }}</td>
+                <td>{{ user.login_token }}</td>
+                <td> <a href="/users/{{user.id}}/edit"><i class="fa fa-pencil"></i></a> </td>
+                <td> <a href="/users/{{user.id}}/delete"><i class="fa fa-trash-o"></i></a> </td>
             </tr>
             {% endfor %}
         </tbody>
