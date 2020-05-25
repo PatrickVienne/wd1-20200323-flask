@@ -1,10 +1,16 @@
+import codecs
+import json
+import tempfile
 import uuid
 
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import Flask, render_template, request, redirect, url_for, make_response, send_file
 import random
 import datetime
 import hashlib
+import json_api as API
 from models import Users, SecretNumberStore, db
+
+APPID = "439d4b804bc8187953eb36d2a8c26a02"
 
 app = Flask(__name__)
 db.create_all()
@@ -164,6 +170,7 @@ def edit_user(user_id):
     if request.method == "GET":
         return render_template("user_edit.html", user=user)
     elif request.method == "POST":
+        # post parameter
         secret_number = request.form.get("secret_number")
         login_token = request.form.get("login_token")
 
@@ -175,7 +182,7 @@ def edit_user(user_id):
 
         return redirect(url_for('register'))
 
-
+# path variable
 @app.route("/users/<user_id>/delete", methods=["GET"])
 def delete_user(user_id):
     user = db.query(Users).get(int(user_id))
@@ -186,6 +193,50 @@ def delete_user(user_id):
         db.delete(user)
         db.commit()
         return response
+
+# url parameters, get parameters
+@app.route("/weather", methods=["GET"])
+def weather():
+
+    user_cities = request.args.get("city")
+    if user_cities:
+        weather_list = [API.get_city_weather(city, APPID) for city in user_cities.split(",")
+                        if API.get_city_weather(city, APPID) is not None]
+    else:
+        cities = ["Berlin", "Barcelona", "Vienna", "Rome", "St. Pölten", "Athens", "Lisbon"]
+
+        weather_list = [API.get_city_weather(city, appId=APPID) for city in cities]
+
+    download_string = request.url_root + "download/weather"
+    if user_cities:
+        download_string += "?city="+user_cities
+
+    context = {
+        "weather_list": weather_list,
+        "downloadlink": download_string
+    }
+
+    return render_template("weather.html", **context)
+
+
+@app.route("/download/weather", methods=["GET"])
+def download_weather():
+
+    user_cities = request.args.get("city")
+    if user_cities:
+        weather_list = [API.get_city_weather(city, APPID) for city in user_cities.split(",")
+                        if API.get_city_weather(city, APPID) is not None]
+    else:
+        cities = ["Berlin", "Barcelona", "Vienna", "Rome", "St. Pölten", "Athens", "Lisbon"]
+
+        weather_list = [API.get_city_weather(city, appId=APPID) for city in cities]
+
+    handle, filepath = tempfile.mkstemp()
+    with codecs.open(filepath, "w", encoding="utf-8") as output:
+        json.dump(weather_list, output)
+
+    return send_file(filepath, as_attachment=True, attachment_filename="cities.json")
+
 
 
 # TODO TODAY:

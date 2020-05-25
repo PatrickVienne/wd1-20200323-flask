@@ -1,0 +1,47 @@
+{% extends "bootstrapframe.html" %}
+
+{% block title %}
+    Weather
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <h1>View Weather!</h1>
+
+    <form method="get">
+        <div class="form-group">
+            <label for="CityInput">City</label>
+            <input type="text" class="form-control" id=CityInput" name="city">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <a href="{{downloadlink}}" download> Download</a>
+    <br/>
+    <h3>Weathers</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>City</th>
+                <th>Temperature</th>
+                <th>Humidity</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for weather_data in weather_list %}
+            <tr>
+                <th></th>
+                <td>{{ weather_data["name"] }}</td>
+                <td>{{ weather_data["main"]["temp"] }} °C </td>
+                <td>{{ weather_data["main"]["humidity"] }}%</td>
+                <td>{{ weather_data["weather"][0]["description"] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock content %}
