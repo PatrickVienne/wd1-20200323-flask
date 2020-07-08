@@ -237,6 +237,21 @@ def download_weather():
 
     return send_file(filepath, as_attachment=True, attachment_filename="cities.json")
 
+@app.route("/mockup", methods=["GET"])
+def download_weather():
+    _directory_0 = request.args.get("pos_0", "")
+    _directory_90 = request.args.get("pos_90", "")
+    _result = request.args.get("result", "")
+    if _directory_0:
+        files: dict = {}
+    if _directory_90:
+        data_90 = {}
+
+    if _result:
+        return _result
+    else:
+        _result = [] if random.random()<0.5 else [1]
+        return  json.dumps(_result)
 
 
 # TODO TODAY:
