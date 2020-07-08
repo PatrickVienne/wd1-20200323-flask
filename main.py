@@ -238,7 +238,7 @@ def download_weather():
     return send_file(filepath, as_attachment=True, attachment_filename="cities.json")
 
 @app.route("/mockup", methods=["GET"])
-def download_weather():
+def mockup():
     _directory_0 = request.args.get("pos_0", "")
     _directory_90 = request.args.get("pos_90", "")
     _result = request.args.get("result", "")
